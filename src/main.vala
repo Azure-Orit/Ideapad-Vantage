@@ -2,41 +2,68 @@ using Gtk;
 
 class MyWindow : ApplicationWindow {
 	private Label bat_threshold;
+	private Label usbcharge;
+	private Label cam;
+	private Label mic;
+	private Label fn;
+	private Label fan;
 	private Label charge_cycles;
 	private Label bat_lvl;
 	private Label bat_status;
-	private Switch switcher;
+	private Switch switcher_bat;
+	private Switch switcher_usb;
+	private Switch switcher_cam;
+	private Switch switcher_mic;
+	private Switch switcher_fn;
 	private Label bat_health;
 	private Label charge_cycles_value;
-	private ProgressBar capacity_value;
+	private ProgressBar lvl_value;
 	private Label status_value;
-	private ProgressBar percentage_value;
+	private ProgressBar health_value;
     internal MyWindow (MyApplication app) {
-        Object (application: app, title: "Ideapad Battery Saver");
+        Object (application: app, title: "Ideapad Vantage");
         this.border_width = 20;
         bat_threshold = new Label ("Battery Threshold Status");
 		bat_threshold.set_xalign (0);
+		usbcharge = new Label ("Charge USB while powered off");
+		usbcharge.set_xalign (0);
+		cam = new Label ("Turn on Camera Module");
+		cam.set_xalign(0);
+		mic = new Label ("Turn on Microphone Module");
+		mic.set_xalign(0);
+		fn = new Label ("Turn on Fn Lock");
+		fn.set_xalign (0);
+		fan = new Label ("Fan Mode");
+		fn.set_xalign (0);
 		charge_cycles = new Label ("Charge Cyles");
 		charge_cycles.set_xalign (0);
 		bat_lvl = new Label ("Battery State of Charge");
 		bat_status = new Label ("Current State");
 		bat_status.set_xalign (0);
 		bat_health = new Label ("Battery Health");
-		capacity_value = new ProgressBar ();
+		lvl_value = new ProgressBar ();
 		charge_cycles_value = new Label ("");
 		charge_cycles_value.set_halign(Gtk.Align.END);
 		status_value = new Label ("");
 		status_value.set_halign(Gtk.Align.END);
-		percentage_value = new ProgressBar ();
-        switcher = new Switch ();
-		switcher.set_halign(Gtk.Align.END);
+		health_value = new ProgressBar ();
+        switcher_bat = new Switch ();
+		switcher_bat.set_halign(Gtk.Align.END);		
+        switcher_usb = new Switch ();
+		switcher_usb.set_halign(Gtk.Align.END);
+		switcher_cam = new Switch ();
+		switcher_cam.set_halign(Gtk.Align.END);
+		switcher_mic = new Switch ();
+		switcher_mic.set_halign(Gtk.Align.END);
+		switcher_fn = new Switch ();
+		switcher_fn.set_halign(Gtk.Align.END);
         File conservation_mode = File.new_for_path ("/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode");
 		FileInputStream @fis0 = conservation_mode.read ();
 		DataInputStream dis0 = new DataInputStream (@fis0);        
 		string line;
 		while ((line = dis0.read_line ()) != null) {
 			if (int.parse (line) == 1){
-				switcher.set_active (true);
+				switcher_bat.set_active (true);
             	}
 		}
 		Timeout.add(50, () => {
@@ -54,8 +81,8 @@ class MyWindow : ApplicationWindow {
 			string string_capacity = dis2.read_line ();
 			double capacity_double = double.parse (string_capacity);
 			double energy = capacity_double/100;
-			capacity_value.set_fraction (energy);
-			capacity_value.set_show_text (true);
+			lvl_value.set_fraction (energy);
+			lvl_value.set_show_text (true);
 			return true;
 		});
 		Timeout.add(50, () => {
@@ -81,34 +108,43 @@ class MyWindow : ApplicationWindow {
 			float x = 100_times/double_energy_full_design;
 			float x_rounded = Math.roundf(x * 100) / 100;
 			float x_100 = x_rounded/100;
-			percentage_value.set_fraction (x_100);
-			percentage_value.set_show_text (true);
+			health_value.set_fraction (x_100);
+			health_value.set_show_text (true);
 			return true;
 		});
 		
 
-        switcher.notify["active"].connect (switcher_cb);
+        switcher_bat.notify["active"].connect (switcher_cb);
         var grid = new Grid ();
 		
         grid.set_column_spacing (30);
 		grid.set_row_spacing (10);
-		grid.attach (bat_lvl, 0, 0, 3, 1);
-		grid.attach (capacity_value, 0, 1, 3, 1);
-		grid.attach (bat_health, 0, 2, 3, 1);
-		grid.attach (percentage_value, 0, 3, 3, 1);
-		grid.attach (bat_status, 0, 4, 1, 1);
-		grid.attach (status_value, 1, 4, 2, 1);
-		grid.attach (charge_cycles, 0, 5, 1, 1);
-		grid.attach (charge_cycles_value, 1, 5, 2, 1);
-        grid.attach (bat_threshold, 0, 6, 1, 1);
-        grid.attach (switcher, 2, 6, 1, 1);
+		grid.attach (fan, 0, 0, 3, 1);
+		grid.attach (bat_lvl, 0, 1, 3, 1);
+		grid.attach (lvl_value, 0, 2, 3, 1);
+		grid.attach (bat_health, 0, 3, 3, 1);
+		grid.attach (health_value, 0, 4, 3, 1);
+		grid.attach (bat_status, 0, 5, 1, 1);
+		grid.attach (status_value, 1, 5, 2, 1);
+		grid.attach (charge_cycles, 0, 6, 1, 1);
+		grid.attach (charge_cycles_value, 1, 6, 2, 1);
+        grid.attach (bat_threshold, 0, 7, 1, 1);
+        grid.attach (switcher_bat, 2, 7, 1, 1);
+		grid.attach (usbcharge, 0, 8, 1, 1);
+		grid.attach (switcher_usb, 2, 8, 1, 1);
+		grid.attach (cam, 0, 9, 1, 1);
+		grid.attach (switcher_cam, 2, 9, 1, 1);
+		grid.attach (mic, 0, 10, 1, 1);
+		grid.attach (switcher_mic, 2, 10, 1, 1);
+		grid.attach (fn, 0, 11, 1, 1);
+		grid.attach (switcher_fn, 2, 11, 1, 1);
 
         this.add (grid);
         
 }
 
-void switcher_cb (Object switcher, ParamSpec pspec) {
-	if ((switcher as Switch).get_active())
+void switcher_cb (Object switcher_bat, ParamSpec pspec) {
+	if ((switcher_bat as Switch).get_active())
         	Posix.system("echo 1 | sudo tee /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode");
         else
         	Posix.system("echo 0 | sudo tee /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode");
