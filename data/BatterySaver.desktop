@@ -1,9 +1,0 @@
-#!/usr/bin/env xdg-open
-[Desktop Entry]
-Version=1.1
-Type=Application
-Name=Ideapad Battery Saver
-Comment=A Battery Saver setting app for Ideapad
-Icon=/usr/local/share/BatterySaver/icon.svg
-Exec=/usr/local/bin/BatterySaver-launcher
-Categories=System;System-Tools;
