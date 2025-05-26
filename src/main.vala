@@ -145,22 +145,22 @@ class MyWindow : ApplicationWindow {
 
 void switcher_cb (Object switcher_bat, ParamSpec pspec) {
 	if ((switcher_bat as Switch).get_active())
-        	Posix.system("echo 1 | sudo tee /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode");
+        	Posix.system("echo 1 | pkexec tee /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode");
         else
-        	Posix.system("echo 0 | sudo tee /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode");
+        	Posix.system("echo 0 | pkexec tee /sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode");
 	}
 }
 
 class MyApplication : Gtk.Application {
 	protected override void activate () {
         	var window = new MyWindow (this);
-        	window.icon = new Gdk.Pixbuf.from_file("/usr/local/share/BatterySaver/icon.svg");
+        	window.icon = new Gdk.Pixbuf.from_file("/usr/local/share/ideapadvantage/icon.svg");
 			window.set_default_size (200, 80);
         	window.show_all (); //show all the things
         	window.resizable = false;
     	}
     	internal MyApplication () {
-        	Object (application_id: "com.github.Azure-Orit.Ideapad-Battery-Saver");
+        	Object (application_id: "com.github.Azure-Orit.Ideapad-Vantage");
     	}
 }
 
