@@ -135,7 +135,6 @@ class MyWindow : ApplicationWindow {
 		
         grid.set_column_spacing (30);
 		grid.set_row_spacing (10);
-		grid.attach (fan, 0, 0, 3, 1);
 		grid.attach (bat_lvl, 0, 1, 3, 1);
 		grid.attach (lvl_value, 0, 2, 3, 1);
 		grid.attach (bat_health, 0, 3, 3, 1);
@@ -144,8 +143,8 @@ class MyWindow : ApplicationWindow {
 		grid.attach (status_value, 1, 5, 2, 1);
 		grid.attach (charge_cycles, 0, 6, 1, 1);
 		grid.attach (charge_cycles_value, 1, 6, 2, 1);
-        grid.attach (bat_threshold, 0, 7, 1, 1);
-        grid.attach (switcher_bat, 2, 7, 1, 1);
+        	grid.attach (bat_threshold, 0, 7, 1, 1);
+        	grid.attach (switcher_bat, 2, 7, 1, 1);
 		grid.attach (usbcharge, 0, 8, 1, 1);
 		grid.attach (switcher_usb, 2, 8, 1, 1);
 		grid.attach (fn, 0, 9, 1, 1);
